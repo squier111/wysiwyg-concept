@@ -1,11 +1,13 @@
+import React from 'react';
 import { Button } from '@material-ui/core';
 
-const ButtonElement = ({ ref }) => {
+const ButtonElement = React.forwardRef((ref, props) => {
   return (
-    <Button buttonRef={ref} variant="contained" color="primary">
+    //@ts-ignore
+    <button ref={ref} {...props}>
       Button Element
-    </Button>
+    </button>
   );
-};
+});
 
 export default ButtonElement;
