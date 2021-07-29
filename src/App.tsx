@@ -28,6 +28,7 @@ function App() {
   const [state, setState] = useState<any>({
     quotes: initial,
   });
+  const [currId, setCurrId] = useState<any>('');
 
   const addHandler = (type: string) => {
     setState({
@@ -41,6 +42,62 @@ function App() {
       ],
     });
   };
+
+  const editHandler = (id) => {
+    const mod = state.quotes.map((item) => {
+      if (item.id === id) {
+        let width = (item['width'] = null);
+        let height = (item['height'] = null);
+        return {
+          ...item,
+          width,
+          height,
+        };
+      }
+      return item;
+    });
+
+    setState({
+      quotes: mod,
+    });
+    setCurrId(id);
+  };
+
+  const widthHandler = (e) => {
+    const mod = state.quotes.map((item) => {
+      if (item.id === currId) {
+        let width = (item['width'] = e.target.value);
+        return {
+          ...item,
+          width,
+        };
+      }
+      return item;
+    });
+
+    setState({
+      quotes: mod,
+    });
+  };
+
+  const heightHandler = (e) => {
+    const mod = state.quotes.map((item) => {
+      if (item.id === currId) {
+        let height = (item['height'] = e.target.value);
+        return {
+          ...item,
+          height,
+        };
+      }
+      return item;
+    });
+
+    setState({
+      quotes: mod,
+    });
+  };
+
+  console.log('state', state.quotes);
 
   function onDragEnd(result) {
     if (!result.destination) {
@@ -66,12 +123,18 @@ function App() {
         <Droppable droppableId="list">
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
-              <Content quotes={state.quotes} />
+              <Content
+                quotes={state.quotes}
+                editHandler={(id) => editHandler(id)}
+              />
             </div>
           )}
         </Droppable>
       </DragDropContext>
-      <RightSidebar />
+      <RightSidebar
+        widthHandler={(e) => widthHandler(e)}
+        heightHandler={(e) => heightHandler(e)}
+      />
     </div>
   );
 }
