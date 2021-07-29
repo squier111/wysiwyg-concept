@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, TextField } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 
 const RightSidebar = ({ heightHandler, widthHandler }) => {
   return (

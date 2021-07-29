@@ -25,6 +25,7 @@
   }
 
   .content {
+    overflow: hidden;
     max-width: 600px;
     min-width: 600px;
     padding: 17px 20px;
@@ -35,6 +36,11 @@
       border: none;
       padding: 0;
     }
+
+  & > div {
+    overflow: hidden;
+    background: #f3f3f3;
+  }
 
    & > * {
      display: block;

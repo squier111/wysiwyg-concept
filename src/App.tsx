@@ -97,8 +97,6 @@ function App() {
     });
   };
 
-  console.log('state', state.quotes);
-
   function onDragEnd(result) {
     if (!result.destination) {
       return;
@@ -115,6 +113,8 @@ function App() {
     );
     setState({ quotes });
   }
+
+  console.log('state', state.quotes);
 
   return (
     <div className="App">
