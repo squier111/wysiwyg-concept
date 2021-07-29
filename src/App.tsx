@@ -3,19 +3,19 @@ import './App.scss';
 import Sidebar from './Components/Sidebar';
 import RightSidebar from './Components/RightSidebar';
 import Content from './Components/Content';
-import { Switch, Route, Link } from 'react-router-dom';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { v4 as uuidv4 } from 'uuid';
 
-const initial = Array.from({ length: 10 }, (v, k) => k).map((k) => {
+const initial = Array.from({ length: 0 }, (v, k) => k).map((k) => {
   const custom: any = {
     id: `id-${k}`,
-    content: `Quote ${k}`,
+    content: `Button ${k}`,
+    typeField: 'button',
   };
 
   return custom;
 });
 
-const grid = 8;
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
@@ -24,30 +24,23 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-function Quote({ quote, index }) {
-  return (
-    <Draggable draggableId={quote.id} index={index}>
-      {(provided) => (
-        <div
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
-          {quote.content}
-        </div>
-      )}
-    </Draggable>
-  );
-}
-
-const QuoteList = function QuoteList({ quotes }) {
-  return quotes.map((quote: any, index: number) => (
-    <Quote quote={quote} index={index} key={quote.id} />
-  ));
-};
-
 function App() {
-  const [state, setState] = useState({ quotes: initial });
+  const [state, setState] = useState<any>({
+    quotes: initial,
+  });
+
+  const addHandler = (type: string) => {
+    setState({
+      quotes: [
+        ...state.quotes,
+        {
+          id: `id-${uuidv4()}`,
+          content: `${type}`,
+          typeField: `${type}`,
+        },
+      ],
+    });
+  };
 
   function onDragEnd(result) {
     if (!result.destination) {
@@ -63,22 +56,21 @@ function App() {
       result.source.index,
       result.destination.index,
     );
-
     setState({ quotes });
   }
+
   return (
     <div className="App">
+      <Sidebar addHandler={(type) => addHandler(type)} />
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="list">
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
-              {/* <QuoteList quotes={state.quotes} /> */}
-              <Sidebar quotes={state.quotes} />
+              <Content quotes={state.quotes} />
             </div>
           )}
         </Droppable>
       </DragDropContext>
-      <Content />
       <RightSidebar />
     </div>
   );
